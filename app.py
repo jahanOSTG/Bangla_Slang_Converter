@@ -1,3 +1,5 @@
+# app.py
+
 import os
 import nltk
 from nltk.tokenize import word_tokenize
@@ -12,6 +14,7 @@ nltk_data_path = os.path.join(os.path.dirname(__file__), "nltk_data")
 if not os.path.exists(nltk_data_path):
     os.makedirs(nltk_data_path)
 
+# NLTK path append
 nltk.data.path.append(nltk_data_path)
 
 # punkt tokenizer download only if not already present
