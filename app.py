@@ -3,10 +3,8 @@ import nltk
 from nltk.tokenize import word_tokenize
 from slang_dict import slang_dict
 
-# -----------------------------
-# Download punkt tokenizer (for Streamlit Cloud)
+# Download punkt tokenizer for Streamlit Cloud
 nltk.download('punkt')
-# -----------------------------
 
 # App config
 st.set_page_config(
