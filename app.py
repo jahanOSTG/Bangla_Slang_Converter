@@ -1,23 +1,7 @@
-import os
-import nltk
-from nltk.tokenize import word_tokenize
+# app.py
+
 import streamlit as st
 from slang_dict import slang_dict  # তোমার slang_dict.py থেকে
-
-# ========================
-# NLTK punkt tokenizer setup
-# ========================
-# Streamlit Cloud or local machine compatible
-nltk_data_path = os.path.join(os.path.dirname(__file__), "nltk_data")
-os.makedirs(nltk_data_path, exist_ok=True)
-nltk.data.path.append(nltk_data_path)
-
-# Download punkt if not already present
-try:
-    nltk.data.find("tokenizers/punkt")
-except LookupError:
-    nltk.download("punkt", download_dir=nltk_data_path)
-    nltk.data.path.append(nltk_data_path)  # ensure path updated after download
 
 # ========================
 # Streamlit App Config
@@ -40,16 +24,13 @@ user_input = st.text_area("👉 আপনার Slang টেক্সট লি�
 # Function: Slang → Formal
 # ========================
 def slang_to_formal(text):
-    # fallback: if empty text, return empty string
+    """
+    Simple Bangla-friendly tokenizer using space-based split.
+    This avoids NLTK/Tokenizer issues and works on Streamlit Cloud.
+    """
     if not text.strip():
         return ""
-    try:
-        tokens = word_tokenize(text)
-    except LookupError:
-        # extra safeguard for Streamlit Cloud
-        nltk.download("punkt", download_dir=nltk_data_path)
-        nltk.data.path.append(nltk_data_path)
-        tokens = word_tokenize(text)
+    tokens = text.split()  # Space-based tokenizer
     converted_tokens = [slang_dict.get(token.lower(), token) for token in tokens]
     return " ".join(converted_tokens)
 
