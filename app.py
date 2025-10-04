@@ -1,10 +1,12 @@
 import streamlit as st
+import os
 import nltk
+
+# Set nltk_data path to local folder
+nltk.data.path.append(os.path.join(os.path.dirname(__file__), "nltk_data"))
+
 from nltk.tokenize import word_tokenize
 from slang_dict import slang_dict
-
-# Download punkt tokenizer for Streamlit Cloud
-nltk.download('punkt')
 
 # App config
 st.set_page_config(
@@ -14,7 +16,7 @@ st.set_page_config(
 )
 
 # Header
-st.image("assets/logo.jpeg", width=100)  
+st.image("assets/logo.jpeg", width=100)
 st.title("📝 Bangla Slang → Formal Converter")
 st.subheader("Casual Bangla Slang কে Formal Bangla টেক্সটে রূপান্তর করুন।")
 
