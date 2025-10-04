@@ -1,5 +1,3 @@
-# app.py
-
 import os
 import nltk
 from nltk.tokenize import word_tokenize
@@ -9,19 +7,17 @@ from slang_dict import slang_dict  # তোমার slang_dict.py থেকে
 # ========================
 # NLTK punkt tokenizer setup
 # ========================
-# Streamlit Cloud বা local machine উভয়ের জন্য
+# Streamlit Cloud or local machine compatible
 nltk_data_path = os.path.join(os.path.dirname(__file__), "nltk_data")
-if not os.path.exists(nltk_data_path):
-    os.makedirs(nltk_data_path)
-
-# NLTK path append
+os.makedirs(nltk_data_path, exist_ok=True)
 nltk.data.path.append(nltk_data_path)
 
-# punkt tokenizer download only if not already present
+# Download punkt if not already present
 try:
     nltk.data.find("tokenizers/punkt")
 except LookupError:
     nltk.download("punkt", download_dir=nltk_data_path)
+    nltk.data.path.append(nltk_data_path)  # ensure path updated after download
 
 # ========================
 # Streamlit App Config
@@ -44,7 +40,16 @@ user_input = st.text_area("👉 আপনার Slang টেক্সট লি�
 # Function: Slang → Formal
 # ========================
 def slang_to_formal(text):
-    tokens = word_tokenize(text)
+    # fallback: if empty text, return empty string
+    if not text.strip():
+        return ""
+    try:
+        tokens = word_tokenize(text)
+    except LookupError:
+        # extra safeguard for Streamlit Cloud
+        nltk.download("punkt", download_dir=nltk_data_path)
+        nltk.data.path.append(nltk_data_path)
+        tokens = word_tokenize(text)
     converted_tokens = [slang_dict.get(token.lower(), token) for token in tokens]
     return " ".join(converted_tokens)
 
